@@ -41,8 +41,28 @@ def filter_users_by_age(age):
             print(user)
 
 
+def filter_users_by_email(email):
+    try:
+        with open("users.json", "r") as file:
+            users = json.load(file)
+    except FileNotFoundError:
+        print("Fehler: users.json nicht gefunden. Bitte erstelle die Datei.")
+        return
+    except json.JSONDecodeError:
+        print("Fehler: users.json ist keine valide JSON-Datei.")
+        return
+
+    filtered_users = [user for user in users if user.get("email", "").lower() == email.lower()]
+
+    if not filtered_users:
+        print(f"Keine Benutzer mit der E-Mail '{email}' gefunden.")
+    else:
+        for user in filtered_users:
+            print(user)
+
+
 if __name__ == "__main__":
-    filter_option = input("Nach welchem Kriterium möchtest du filtern? (Name/Alter): ").strip().lower()
+    filter_option = input("Nach welchem Kriterium möchtest du filtern? (Name/Alter/E-Mail): ").strip().lower()
 
     if filter_option == "name":
         name_to_search = input("Gib einen Namen zum Filtern ein: ").strip()
@@ -58,5 +78,13 @@ if __name__ == "__main__":
             filter_users_by_age(age_to_search)
         except ValueError:
             print("Ungültige Eingabe. Bitte gib eine ganze Zahl für das Alter ein.")
+
+    elif filter_option == "e-mail" or filter_option == "email":
+        email_to_search = input("Gib eine E-Mail zum Filtern ein: ").strip()
+        if email_to_search:
+            filter_users_by_email(email_to_search)
+        else:
+            print("Keine E-Mail eingegeben.")
     else:
         print("Diese Filteroption wird nicht unterstützt.")
+

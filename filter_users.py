@@ -87,3 +87,4 @@ if __name__ == "__main__":
             print("Keine E-Mail eingegeben.")
     else:
         print("Diese Filteroption wird nicht unterstützt.")
+
